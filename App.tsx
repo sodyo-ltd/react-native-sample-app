@@ -73,9 +73,9 @@ export default class App extends PureComponent {
 
   componentDidMount (): void {
     SodyoSdk.init(
-      'eb80d13c60474639ba3d14719e85e2a4',
+      'API_KEY',
       () => {
-        console.warn('SodyoSDK.init.succ')
+        console.warn('SodyoSDK.init.success')
         this.setState({ isReady: true })
 
         SodyoSdk.setUserInfo({ userName: 'Donald' })

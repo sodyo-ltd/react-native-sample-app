@@ -9,7 +9,7 @@ import {
   PermissionsAndroid,
   Platform,
 } from 'react-native'
-import SodyoSdk from 'react-native-sodyo-sdk'
+import SodyoSdk from '@sodyo/react-native-sodyo-sdk'
 import { overlay } from './overlay'
 
 export default class App extends PureComponent {

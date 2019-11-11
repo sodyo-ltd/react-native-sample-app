@@ -81,7 +81,6 @@ export default class App extends PureComponent {
         SodyoSdk.setUserInfo({ userName: 'Donald' })
         SodyoSdk.setAppUserId('123')
         SodyoSdk.setCustomAdLabel('label1,label2,label3')
-        SodyoSdk.setScannerParams({ Prob_Size: 8 })
 
         SodyoSdk.setOverlayView(overlay)
         SodyoSdk.setOverlayCallback('handleCloseSodyoScanner', this.handleCloseScanner)

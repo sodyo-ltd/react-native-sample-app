@@ -9,7 +9,7 @@
     "lint": "tslint -c tslint.json './src/**/*'"
   },
   "dependencies": {
-    "@sodyo/react-native-sodyo-sdk": "0.1.0",
+    "@sodyo/react-native-sodyo-sdk": "0.2.0",
     "react": "16.8.6",
     "react-native": "0.60.5"
   },

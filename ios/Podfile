@@ -27,8 +27,7 @@ target 'sampleSodyoSdk' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  pod 'SodyoSDK', :git => 'https://github.com/SodyoSDK/SodyoSDKPod.git', :commit => 'c21ae72'
-  pod 'RNSodyoSdk', :path => '../node_modules/react-native-sodyo-sdk'
+  pod 'RNSodyoSdk', :path => '../node_modules/@sodyo/react-native-sodyo-sdk'
 
   target 'sampleSodyoSdkTests' do
     inherit! :search_paths

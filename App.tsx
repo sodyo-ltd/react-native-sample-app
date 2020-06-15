@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react'
 import {
   SafeAreaView,
   StyleSheet,
-  ScrollView,
   View,
   Text,
   Button,
@@ -11,18 +10,33 @@ import {
   ActivityIndicator,
 } from 'react-native'
 import SodyoSdk, { Scanner } from '@sodyo/react-native-sodyo-sdk'
-import { overlay } from './overlay'
 
-export default class App extends PureComponent {
+interface IState {
+  isInit: boolean,
+  initErr: any,
+  sodyoErr: string,
+  immediateData: string,
+  scannerErr: string,
+  currentMarkerId: string,
+  currentMarkerData: any,
+  scannerFragmentIsEnabled: boolean,
+}
+
+export default class App extends PureComponent<{}, IState> {
   state = {
-    isReady: false,
+    isInit: false,
     initErr: null,
     sodyoErr: '',
     immediateData: '',
     scannerErr: '',
     currentMarkerId: '',
     currentMarkerData: null,
+    isStarted: false,
     scannerFragmentIsEnabled: true,
+  }
+
+  handleToggleScanner = () => {
+    this.setState({ scannerFragmentIsEnabled: !this.state.scannerFragmentIsEnabled })
   }
 
   handleOpenScanner = async () => {
@@ -40,17 +54,19 @@ export default class App extends PureComponent {
       SodyoSdk.start(
         (immediateData) => {
           console.warn('SodyoSDK.start.immediate', immediateData)
-          this.setState({ immediateData: immediateData })
+          this.setState({ immediateData })
         },
         (err) => {
           console.warn('SodyoSDK.start.err', JSON.stringify(err))
-          this.setState({ scannerErr: err, scannerFragmentIsEnabled: true })
+          this.setState({ scannerErr: err })
         })
     } catch (err) {
       this.setState({ scannerFragmentIsEnabled: true })
       console.warn(err.message)
     }
   }
+
+  handleCloseScanner = () => SodyoSdk.close()
 
   handleOpenLastMarker = () => {
     const { currentMarkerId } = this.state
@@ -63,37 +79,17 @@ export default class App extends PureComponent {
     SodyoSdk.performMarker(currentMarkerId)
   }
 
-  handleCloseScanner = () => {
-    console.warn('handleCloseSodyoScanner')
-    this.setState({ scannerFragmentIsEnabled: true })
-    SodyoSdk.close()
-  }
-
-  handlePressLeft = () => {
-    console.warn('handlePressLeft')
-    SodyoSdk.close()
-  }
-
-  handlePressRight = () => {
-    console.warn('handlePressRight')
-    SodyoSdk.close()
-  }
-
   componentDidMount (): void {
     SodyoSdk.init(
       '!!!API_KEY!!!',
       () => {
         console.warn('SodyoSDK.init.success')
-        this.setState({ isReady: true })
 
         SodyoSdk.setUserInfo({ userName: 'Donald' })
         SodyoSdk.setAppUserId('123')
         SodyoSdk.setCustomAdLabel('label1,label2,label3')
 
-        SodyoSdk.setOverlayView(overlay)
-        SodyoSdk.setOverlayCallback('handleCloseSodyoScanner', this.handleCloseScanner)
-        SodyoSdk.setOverlayCallback('handlePressLeft', this.handlePressLeft)
-        SodyoSdk.setOverlayCallback('handlePressRight', this.handlePressRight)
+        this.setState({ isInit: true })
       },
       (err) => {
         console.warn('SodyoSDK.init.err', JSON.stringify(err))
@@ -120,7 +116,7 @@ export default class App extends PureComponent {
 
   render () {
     const {
-      isReady,
+      isInit,
       initErr,
       sodyoErr,
       immediateData,
@@ -132,11 +128,11 @@ export default class App extends PureComponent {
 
     return (
       <SafeAreaView>
-        {isReady ? (
+        {isInit ? (
           <Scanner isEnabled={scannerFragmentIsEnabled}>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>Hello, SodyoSDK</Text>
-              <Text style={styles.sectionDescription}>isReady: {isReady.toString()}</Text>
+              <Text style={styles.sectionDescription}>isInit: {isInit.toString()}</Text>
               <Text style={styles.sectionDescription}>initErr: {initErr}</Text>
               <Text style={styles.sectionDescription}>sodyoErr: {sodyoErr}</Text>
               <Text style={styles.sectionDescription}>immediateData: {immediateData}</Text>
@@ -145,11 +141,20 @@ export default class App extends PureComponent {
               <Text style={styles.sectionDescription}>currentMarkerData: {JSON.stringify(currentMarkerData)}</Text>
             </View>
 
-            <Button
-              onPress={this.handleOpenScanner}
-              title={`Open scanner as new ${Platform.OS === 'ios' ? 'view controller' : 'intent'} `}
-            />
-            <Button onPress={this.handleOpenLastMarker} title='Open last marker' />
+            <View style={styles.btn}>
+              <Button
+                onPress={this.handleOpenScanner}
+                title={`Open scanner as new ${Platform.OS === 'ios' ? 'view controller' : 'intent'} `}
+              />
+            </View>
+
+            <View style={styles.btn}>
+              <Button onPress={this.handleToggleScanner} title='Pause/Continue scanner' />
+            </View>
+
+            <View style={styles.btn}>
+              <Button onPress={this.handleOpenLastMarker} title='Open last marker' />
+            </View>
           </Scanner>
         ) : <ActivityIndicator size='large' />}
       </SafeAreaView>
@@ -171,6 +176,9 @@ const styles = StyleSheet.create({
     marginTop: 8,
     fontSize: 18,
     fontWeight: '400',
+  },
+  btn: {
+    marginVertical: 10,
   },
 })
 

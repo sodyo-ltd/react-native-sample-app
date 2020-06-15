@@ -931,10 +931,10 @@
     eslint-plugin-react-native "3.6.0"
     prettier "1.16.4"
 
-"@sodyo/react-native-sodyo-sdk":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@sodyo/react-native-sodyo-sdk/-/react-native-sodyo-sdk-1.0.0.tgz#22e11ba46f58533ebc33ca0d2c4492c08359f10d"
-  integrity sha512-VhJ5HZ6sRthtYgNJc5lgwZ2ED4bJiTxQ62+AH0yGEC0VQSOl95WepVzThXmMh653LGJu7TAkrGhkh/0YDZKfdA==
+"@sodyo/react-native-sodyo-sdk@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@sodyo/react-native-sodyo-sdk/-/react-native-sodyo-sdk-2.0.0.tgz#5b815ba8e52d43fde91e9fe4fa050739aa77e51a"
+  integrity sha512-X15SoKXcJo6Ua+72qPJxb0xikRj7JtlBw9rR3x2PSXDsWJUfzXlC5aXiIlPlOpa1ppl3RhlIoBdQNORSrS+9rA==
 
 "@types/babel__core@^7.1.0":
   version "7.1.3"
@@ -4838,10 +4838,10 @@ react-is@^16.8.1, react-is@^16.8.4, react-is@^16.8.6:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.12.0.tgz#2cc0fe0fba742d97fd527c42a13bec4eeb06241c"
   integrity sha512-rPCkf/mWBtKc97aLL9/txD8DZdemK0vkA3JMLShjlJB3Pj3s+lpf1KaBzMfQrAmhMQB0n1cU/SUGgKKBCe837Q==
 
-react-native@0.60.5:
-  version "0.60.5"
-  resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.60.5.tgz#3c1d9c06a0fbab9807220b6acac09488d39186ee"
-  integrity sha512-cZwI0XzzihACN+7an1Dy46A83FRaAe2Xyd7laCalFFAppZIYeMVphZQWrVljJk5kIZBNtYG35TY1VsghQ0Oc2Q==
+react-native@0.60.6:
+  version "0.60.6"
+  resolved "https://registry.yarnpkg.com/react-native/-/react-native-0.60.6.tgz#8a13dece1c3f6e01db0833db14d2b01b2d8ccba5"
+  integrity sha512-eIoHh0fncrmw2WUs42D1KwLfatOuLFLFLOKzJJJ8mOOQtbo9i2rOOa0+2iWjefDoAy8BJH88bQGvDvlrexmhow==
   dependencies:
     "@babel/runtime" "^7.0.0"
     "@react-native-community/cli" "^2.6.0"

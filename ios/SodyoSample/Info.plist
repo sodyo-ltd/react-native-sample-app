@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>Sodyo Example</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>$(PRODUCT_NAME)</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>localhost</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+		</dict>
+	</dict>
+	<key>NSCalendarsUsageDescription</key>
+	<string>This application can generated meeting events which will be automatically added to user calendar</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This app uses the camera to scan Sodyo codes for interactive experiences.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>From time to time the user may want to add a new contact from the application to his contacts.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Allow to receive personalized location based offers.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Allow to receive personalized location based offers.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need to access your Location to send you proper notifications</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Sodyo would like access to your microphone to take video</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Sodyo would like access to your photo gallery to change your profile picture</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Sodyo would like access to your photo gallery to change your profile picture</string>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIRequiredDeviceCapabilities</key>
+	<array>
+		<string>armv7</string>
+	</array>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+</dict>
+</plist>

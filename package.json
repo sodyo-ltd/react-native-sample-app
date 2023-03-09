@@ -12,7 +12,8 @@
   "dependencies": {
     "@sodyo/react-native-sodyo-sdk": "^3.7.0",
     "react": "17.0.2",
-    "react-native": "0.68.2"
+    "react-native": "0.68.2",
+    "react-native-webview": "^11.26.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.2",

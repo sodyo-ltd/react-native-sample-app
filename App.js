@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   SafeAreaView,
@@ -7,147 +7,115 @@ import {
   View,
   Button,
   PermissionsAndroid, Platform,
+  TouchableOpacity,
+  Linking,
 } from "react-native";
 
 import SodyoSdk, { Scanner } from '@sodyo/react-native-sodyo-sdk'
+import { WebView } from 'react-native-webview'
 
 
 const SODYO_APP_KEY = 'aee837645d2145e7a699fbeb38b5d184'
 const SODYO_ENV = 'DEV'
 
 const App = () => {
-  const [isInitialized, setIsInitialized] = useState(false)
-  const [isScannedEnabled, setIsScannerEnabled] = useState(false)
-  const [error, setError] = useState('')
-  const [immediateData, setImmediateData] = useState('')
-  const [scannerError, setScannerError] = useState('')
-  const [currentMarkerId, setCurrentMarkerId] = useState('')
-  const [currentMarkerData, setCurrentMarkerData] = useState(null)
+  const webViewRef = useRef()
+  const [isScannerOpen, setIsScannerOpen] = useState(false)
+  const [status, setStatus] = useState('')
 
-  useEffect(() => {
-    SodyoSdk.init(
-      SODYO_APP_KEY,
-      async () => {
-        SodyoSdk.setEnv(SODYO_ENV)
-        SodyoSdk.setSodyoLogoVisible(false)
-        SodyoSdk.addScannerParam('LoadingIndicator', 'true')
+  const handleOpenScanner = useCallback(() => {
+    setIsScannerOpen(true)
 
-        setIsInitialized(true)
-        setError('')
-      },
-      (e) => {
-        setIsInitialized(true)
-        setError(e)
-      },
+    console.log(webViewRef.current)
+
+    if (!webViewRef.current) {
+      return
+    }
+
+    webViewRef.current.injectJavaScript(
+      `window.postMessage(
+      {
+        openScanner: true,
+        sender: 'SDK',
+      }
+    );`
     )
+  }, [])
 
-    SodyoSdk.onError(
-      (err) => {
-        setError(err)
-      },
-    )
+  const handleCloseScanner = useCallback(() => {
+    setIsScannerOpen(false)
+  }, [])
 
-    SodyoSdk.onModeChange((data) => {
-      if (!data) {
-        return
+  const onMessage = useCallback((event) => {
+    const data = event.nativeEvent.data
+
+    if (!data) {
+      return
+    }
+
+    const parsedData = JSON.parse(data)
+
+    if (!parsedData) {
+      return
+    }
+
+    if (parsedData.sender === 'SODYO_SDK') {
+
+      if (parsedData.status) {
+        setStatus(`SDK status: ${parsedData.status}`)
       }
 
-      if (data.newMode === 'Troubleshoot') {
+      if (parsedData.closeScanner) {
+        setIsScannerOpen(false)
+        webViewRef.current.injectJavaScript(
+          `window.postMessage(
+          {
+            closeScanner: true,
+            sender: 'SDK',
+          }
+        );`
+        )
       }
-
-      if (data.newMode === 'Normal') {
-      }
-    })
-
-    SodyoSdk.onMarkerContent((markerId, data) => {
-      setCurrentMarkerId(markerId)
-      setCurrentMarkerData(data)
-    })
-
-    return () => {
-      // SodyoSdk.removeAllListeners()
     }
 
   }, [])
 
-  const handleOpenLastMarker = () => {
-    if (!currentMarkerId) {
-      alert('No current marker ID')
-      return
-    }
-
-    SodyoSdk.performMarker(currentMarkerId)
-  }
-
-  const handleToggleEnabled = () => {
-    setIsScannerEnabled(val => !val)
-  }
-
-  const handleOpenScanner = async () => {
-    try {
-      const granted = Platform.OS === 'ios'
-        ? PermissionsAndroid.RESULTS.GRANTED
-        : await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA)
-
-      if (granted !== PermissionsAndroid.RESULTS.GRANTED) return
-
-      SodyoSdk.start(
-        (immediateData) => {
-          setImmediateData(immediateData)
-        },
-        (err) => {
-          setScannerError(err)
-        })
-    } catch (err) {
-      alert(err)
-    }
-  }
-
-  if (!isInitialized) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.loaderContainer}>
-          <ActivityIndicator size='large' color='#d3d3d3' />
-        </View>
-      </SafeAreaView>
-    )
-  }
-
-
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.container}>
-        <Scanner
-          isEnabled={isScannedEnabled}
+      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+        <TouchableOpacity
+          style={{
+            paddingVertical: 12,
+            paddingHorizontal: 20,
+            backgroundColor: '#039be5',
+            borderRadius: 8,
+          }}
+          onPress={handleOpenScanner}
         >
-          <View style={styles.sectionContainer}>
-            <Text style={styles.sectionTitle}>SodyoSDK</Text>
-            <Text style={styles.sectionDescription}>Is initialized: {isInitialized.toString()}</Text>
-            <Text style={styles.sectionDescription}>Error: {error}</Text>
-            <Text style={styles.sectionDescription}>Immediate data: {immediateData}</Text>
-            <Text style={styles.sectionDescription}>Scanner error: {scannerError}</Text>
-            <Text style={styles.sectionDescription}>Current marker ID: {currentMarkerId}</Text>
-            <Text style={styles.sectionDescription}>Current marker data: {JSON.stringify(currentMarkerData)}</Text>
-          </View>
-
-          <View style={styles.btn}>
-            <Button onPress={handleToggleEnabled} title='Start/Pause scanner' />
-          </View>
-
-          <View style={styles.btn}>
-            <Button
-              onPress={handleOpenScanner}
-              title={`Open scanner as new ${Platform.OS === 'ios' ? 'view controller' : 'intent'} `}
-            />
-          </View>
-
-          <View style={styles.btn}>
-            <Button onPress={handleOpenLastMarker} title='Open last marker' />
-          </View>
-        </Scanner>
+          <Text style={{ fontWeight: 'bold' }} >
+            Open scanner
+          </Text>
+        </TouchableOpacity>
+        <Text style={{ marginVertical: 20 }}>
+          {status}
+        </Text>
+      </View>
+      <View style={{
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        display: isScannerOpen ? 'flex' : 'none',
+      }}>
+        <WebView
+          ref={webViewRef}
+          source={{ uri: 'http://localhost:1234' }}
+          onMessage={onMessage}
+        />
       </View>
     </SafeAreaView>
-  );
+  )
 };
 
 const styles = StyleSheet.create({

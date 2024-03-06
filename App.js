@@ -13,16 +13,18 @@ import SodyoSdk, { Scanner } from '@sodyo/react-native-sodyo-sdk'
 
 
 const SODYO_APP_KEY = 'aee837645d2145e7a699fbeb38b5d184'
-const SODYO_ENV = 'DEV'
+const SODYO_ENV = 'dev'
 
 const App = () => {
   const [isInitialized, setIsInitialized] = useState(false)
-  const [isScannedEnabled, setIsScannerEnabled] = useState(false)
+  const [isScannedEnabled, setIsScannerEnabled] = useState(true)
   const [error, setError] = useState('')
   const [immediateData, setImmediateData] = useState('')
   const [scannerError, setScannerError] = useState('')
   const [currentMarkerId, setCurrentMarkerId] = useState('')
   const [currentMarkerData, setCurrentMarkerData] = useState(null)
+
+  const [isTroubleshootEnabled, setIsTroubleshootEnabled] = useState(false)
 
   useEffect(() => {
     SodyoSdk.init(
@@ -31,6 +33,12 @@ const App = () => {
         SodyoSdk.setEnv(SODYO_ENV)
         SodyoSdk.setSodyoLogoVisible(false)
         SodyoSdk.addScannerParam('LoadingIndicator', 'true')
+
+        SodyoSdk.setAppUserId('sodyo-sample-test-user')
+        SodyoSdk.setUserInfo({
+          firstName: 'Sodyo Sample',
+          lastName: 'Test User'
+        })
 
         setIsInitialized(true)
         setError('')
@@ -53,9 +61,11 @@ const App = () => {
       }
 
       if (data.newMode === 'Troubleshoot') {
+        setIsTroubleshootEnabled(true)
       }
 
       if (data.newMode === 'Normal') {
+        setIsTroubleshootEnabled(false)
       }
     })
 
@@ -83,23 +93,11 @@ const App = () => {
     setIsScannerEnabled(val => !val)
   }
 
-  const handleOpenScanner = async () => {
-    try {
-      const granted = Platform.OS === 'ios'
-        ? PermissionsAndroid.RESULTS.GRANTED
-        : await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA)
-
-      if (granted !== PermissionsAndroid.RESULTS.GRANTED) return
-
-      SodyoSdk.start(
-        (immediateData) => {
-          setImmediateData(immediateData)
-        },
-        (err) => {
-          setScannerError(err)
-        })
-    } catch (err) {
-      alert(err)
+  const handleToggleTroubleShoot = () => {
+    if (isTroubleshootEnabled) {
+      SodyoSdk.setNormalMode()
+    } else {
+      SodyoSdk.setTroubleshootMode()
     }
   }
 
@@ -123,6 +121,7 @@ const App = () => {
           <View style={styles.sectionContainer}>
             <Text style={styles.sectionTitle}>SodyoSDK</Text>
             <Text style={styles.sectionDescription}>Is initialized: {isInitialized.toString()}</Text>
+            <Text style={styles.sectionDescription}>Is enabled: {isScannedEnabled.toString()}</Text>
             <Text style={styles.sectionDescription}>Error: {error}</Text>
             <Text style={styles.sectionDescription}>Immediate data: {immediateData}</Text>
             <Text style={styles.sectionDescription}>Scanner error: {scannerError}</Text>
@@ -135,10 +134,7 @@ const App = () => {
           </View>
 
           <View style={styles.btn}>
-            <Button
-              onPress={handleOpenScanner}
-              title={`Open scanner as new ${Platform.OS === 'ios' ? 'view controller' : 'intent'} `}
-            />
+            <Button onPress={handleToggleTroubleShoot} title='Start/Pause troubleshoot' />
           </View>
 
           <View style={styles.btn}>

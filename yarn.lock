@@ -1381,10 +1381,10 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@sodyo/react-native-sodyo-sdk@^3.7.0":
-  version "3.7.0"
-  resolved "https://registry.yarnpkg.com/@sodyo/react-native-sodyo-sdk/-/react-native-sodyo-sdk-3.7.0.tgz#4b0be0c2b102ccc287060883ddbb973ff5243926"
-  integrity sha512-2xhlxUC/3ZNiw4RCyciFXXXjUX8piDgs/Hgyi/LXmbO4u9nzmyC8N1giTQgJJNOgNhsdYsAKFCx1h14fNsEs2g==
+"@sodyo/react-native-sodyo-sdk@3.11.4":
+  version "3.11.4"
+  resolved "https://registry.yarnpkg.com/@sodyo/react-native-sodyo-sdk/-/react-native-sodyo-sdk-3.11.4.tgz#5993a3d77bba9fb6a05ad0696445aa2478158356"
+  integrity sha512-yxt4aClMhqZHvZjCM65UUwsRHtJIpheeifnyOYqWdHpDlZ/yWeG8W/RMwgRRU82qBUncs+DCVcGKUqDoWFCwJQ==
 
 "@types/babel__core@^7.1.14":
   version "7.1.20"

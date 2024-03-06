@@ -10,7 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@sodyo/react-native-sodyo-sdk": "^3.7.0",
+    "@sodyo/react-native-sodyo-sdk": "3.11.4",
     "react": "17.0.2",
     "react-native": "0.68.2"
   },
@@ -26,5 +26,6 @@
   },
   "jest": {
     "preset": "react-native"
-  }
+  },
+  "packageManager": "yarn@1.22.1"
 }
